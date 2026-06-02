@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">DriveNote</string>
+    <string name="shortcut_record_short">DriveNote 기록</string>
+    <string name="shortcut_record_long">DriveNote에 기록</string>
 </resources>
