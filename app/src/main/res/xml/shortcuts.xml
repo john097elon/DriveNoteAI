@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="record_note"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_btn_speak_now"
+        android:shortcutShortLabel="DriveNote 기록"
+        android:shortcutLongLabel="DriveNote에 기록">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.drivenote.app"
+            android:targetClass="com.drivenote.app.MainActivity" />
+    </shortcut>
+</shortcuts>
