@@ -30,6 +30,7 @@ import com.drivenote.app.ui.search.SearchScreen
 import com.drivenote.app.ui.search.SearchViewModel
 import com.drivenote.app.ui.settings.SettingsScreen
 import com.drivenote.app.ui.settings.SettingsViewModel
+import com.drivenote.app.ui.voice.VoiceScreen
 
 @Composable
 fun DriveNoteNavHost() {
@@ -41,7 +42,8 @@ fun DriveNoteNavHost() {
     Scaffold(
         bottomBar = {
             if (currentDestination?.route?.startsWith("detail/") != true &&
-                currentDestination?.route?.startsWith("filter") != true
+                currentDestination?.route?.startsWith("filter") != true &&
+                currentDestination?.route?.startsWith("voice") != true
             ) {
                 NavigationBar {
                     rootScreens.forEach { screen ->
@@ -75,6 +77,7 @@ fun DriveNoteNavHost() {
                 HomeScreen(
                     uiState = uiState,
                     onRecordClick = viewModel::toggleRecording,
+                    onOpenVoiceConversation = { navController.navigate(Screen.Voice.route) },
                     onNoteClick = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
                     onCategorySelected = viewModel::selectCategory,
                     onOpenFilter = { category ->
@@ -146,6 +149,10 @@ fun DriveNoteNavHost() {
                     onBack = { navController.popBackStack() },
                     onNoteClick = { id -> navController.navigate(Screen.Detail.createRoute(id)) }
                 )
+            }
+
+            composable(Screen.Voice.route) {
+                VoiceScreen()
             }
         }
     }

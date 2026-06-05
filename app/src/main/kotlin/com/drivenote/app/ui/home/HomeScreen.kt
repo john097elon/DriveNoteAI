@@ -46,6 +46,7 @@ import java.util.Locale
 fun HomeScreen(
     uiState: HomeUiState,
     onRecordClick: () -> Unit,
+    onOpenVoiceConversation: () -> Unit,
     onNoteClick: (String) -> Unit,
     onCategorySelected: (NoteCategory?) -> Unit,
     onOpenFilter: (NoteCategory?) -> Unit,
@@ -76,7 +77,8 @@ fun HomeScreen(
                 HomeHeader(
                     noteCount     = noteCount,
                     unsyncedCount = unsyncedCount,
-                    onSyncClick   = onSyncClick
+                    onSyncClick   = onSyncClick,
+                    onOpenVoiceConversation = onOpenVoiceConversation
                 )
                 CategoryFilterRow(
                     selected    = uiState.selectedCategory,
@@ -137,7 +139,8 @@ private fun RecordButton(
 private fun HomeHeader(
     noteCount: Int,
     unsyncedCount: Int,
-    onSyncClick: () -> Unit
+    onSyncClick: () -> Unit,
+    onOpenVoiceConversation: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -167,8 +170,16 @@ private fun HomeHeader(
                 )
             }
         }
-        FilledTonalButton(onClick = onSyncClick) {
-            Text("전송", style = MaterialTheme.typography.labelLarge)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalAlignment = Alignment.End
+        ) {
+            FilledTonalButton(onClick = onSyncClick) {
+                Text("전송", style = MaterialTheme.typography.labelLarge)
+            }
+            TextButton(onClick = onOpenVoiceConversation) {
+                Text("Hermes 대화", style = MaterialTheme.typography.labelLarge)
+            }
         }
     }
 }

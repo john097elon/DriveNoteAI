@@ -36,6 +36,11 @@
             android:foregroundServiceType="microphone" />
 
         <service
+            android:name=".audio.VoiceConversationService"
+            android:exported="false"
+            android:foregroundServiceType="microphone" />
+
+        <service
             android:name=".auto.DriveNoteCarAppService"
             android:exported="true">
             <intent-filter>
