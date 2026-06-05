@@ -14,6 +14,8 @@ coroutines = "1.8.1"
 ktor = "2.3.12"
 work = "2.9.1"
 serialization = "1.7.3"
+carApp = "1.4.0"
+androidxMedia = "1.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +51,8 @@ ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serializatio
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version = "1.2.0" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version = "1.2.0" }
+androidx-car-app = { group = "androidx.car.app", name = "app", version.ref = "carApp" }
+androidx-media = { group = "androidx.media", name = "media", version.ref = "androidxMedia" }
 
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version = "1.2.1" }
 junit = { group = "junit", name = "junit", version = "4.13.2" }

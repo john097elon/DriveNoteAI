@@ -3,4 +3,8 @@
     <string name="app_name">DriveNote</string>
     <string name="shortcut_record_short">DriveNote 기록</string>
     <string name="shortcut_record_long">DriveNote에 기록</string>
+    <string name="auto_record_start">녹음 시작</string>
+    <string name="auto_record_stop">녹음 중지</string>
+    <string name="auto_recording_now">운전 메모 녹음 중</string>
+    <string name="auto_tap_to_record">탭해서 메모 녹음</string>
 </resources>

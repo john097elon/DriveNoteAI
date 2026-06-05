@@ -85,6 +85,8 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
 
     implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.car.app)
+    implementation(libs.androidx.media)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
