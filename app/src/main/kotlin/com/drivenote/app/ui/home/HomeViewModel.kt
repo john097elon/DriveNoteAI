@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.drivenote.app.audio.AudioRecorderManager
+import com.drivenote.app.audio.RecordingService
 import com.drivenote.app.audio.SttManager
 import com.drivenote.app.domain.model.Note
 import com.drivenote.app.domain.model.NoteCategory
@@ -74,11 +75,31 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun startRecording() {
-        runCatching { audioRecorderManager.startRecording(context) }
+        runCatching { RecordingService.start(context) }
             .onSuccess {
-                _uiState.update { it.copy(isRecording = true, recordingSeconds = 0, error = null) }
                 timerJob?.cancel()
                 timerJob = viewModelScope.launch {
+                    var startError: String? = null
+                    for (attempt in 0..5) {
+                        startError = RecordingService.consumeLastStartError()
+                        if (startError != null) break
+                        if (attempt < 5) {
+                            delay(100L)
+                        }
+                    }
+
+                    if (startError != null) {
+                        _uiState.update {
+                            it.copy(
+                                isRecording = false,
+                                recordingSeconds = 0,
+                                error = startError
+                            )
+                        }
+                        return@launch
+                    }
+
+                    _uiState.update { it.copy(isRecording = true, recordingSeconds = 0, error = null) }
                     while (true) {
                         delay(1000L)
                         _uiState.update { state ->
@@ -96,10 +117,25 @@ class HomeViewModel @Inject constructor(
 
     private fun stopRecordingAndSave() {
         timerJob?.cancel()
-        val audioPath = audioRecorderManager.stopRecording()
+        var fallbackAudioPath = audioRecorderManager.getCurrentFilePath()
+        runCatching { RecordingService.stop(context) }
+            .onFailure {
+                fallbackAudioPath = audioRecorderManager.stopRecording() ?: fallbackAudioPath
+            }
         _uiState.update { it.copy(isRecording = false) }
 
         viewModelScope.launch {
+            var audioPath = RecordingService.consumeLastStoppedAudioPath()
+            var pollCount = 0
+            while (audioPath == null && pollCount < 5) {
+                delay(100L)
+                audioPath = RecordingService.consumeLastStoppedAudioPath()
+                pollCount++
+            }
+            if (audioPath == null) {
+                audioPath = audioRecorderManager.stopRecording() ?: fallbackAudioPath
+            }
+
             val transcribed = sttManager.transcribe(context).getOrDefault("")
             val text = transcribed.ifBlank { "재녹음 필요: 음성 인식에 실패했습니다." }
             val note = Note(

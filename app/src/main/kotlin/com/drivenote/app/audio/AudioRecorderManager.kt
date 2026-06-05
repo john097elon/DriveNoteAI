@@ -50,4 +50,6 @@ class AudioRecorderManager @Inject constructor() {
         currentFilePath = null
         return path
     }
+
+    fun getCurrentFilePath(): String? = currentFilePath
 }
