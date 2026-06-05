@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,43 +54,40 @@ fun NoteCard(
         Row(modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
             Box(
                 modifier = Modifier
-                    .width(6.dp)
+                    .width(8.dp)
                     .fillMaxHeight()
                     .background(categoryColorFor(note.category))
             )
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 14.dp, vertical = 12.dp)
+                    .padding(horizontal = 16.dp, vertical = 14.dp)
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     CategoryChip(category = note.category)
-                    StatusPill(
-                        text = if (note.isClassified) "분류 완료" else "분류 중",
-                        active = note.isClassified
-                    )
-                    StatusPill(
-                        text = if (note.isSynced) "동기화 완료" else "동기화 대기",
-                        active = note.isSynced
-                    )
+                    if (!note.isClassified) StatusPill("분류 중")
+                    if (!note.isSynced) StatusPill("미동기화")
                 }
                 Text(
-                    text = note.text.ifBlank { "내용 없음" },
-                    style = MaterialTheme.typography.bodyLarge,
-                    maxLines = 2,
+                    text     = note.text.ifBlank { "내용 없음" },
+                    style    = MaterialTheme.typography.bodyLarge,
+                    maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color    = MaterialTheme.colorScheme.onSurface
                 )
                 if (note.tags.isNotEmpty()) {
                     Text(
-                        text = note.tags.take(3).joinToString("  ") { "#$it" },
+                        text  = note.tags.take(3).joinToString("  ") { "#$it" },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.tertiary
                     )
                 }
                 Text(
-                    text = note.createdAt.toKoreanTimeText(),
+                    text  = note.createdAt.toKoreanTimeText(),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -99,40 +97,27 @@ fun NoteCard(
 }
 
 @Composable
-private fun StatusPill(
-    text: String,
-    active: Boolean
-) {
+private fun StatusPill(text: String) {
     Surface(
-        color = if (active) {
-            MaterialTheme.colorScheme.primaryContainer
-        } else {
-            MaterialTheme.colorScheme.surfaceVariant
-        },
-        contentColor = if (active) {
-            MaterialTheme.colorScheme.onPrimaryContainer
-        } else {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        },
-        shape = MaterialTheme.shapes.small
+        color        = MaterialTheme.colorScheme.surfaceContainerHighest,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        shape        = MaterialTheme.shapes.extraSmall
     ) {
         Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
+            text     = text,
+            style    = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
         )
     }
 }
 
-private fun categoryColorFor(category: NoteCategory): Color {
-    return when (category) {
-        NoteCategory.WORK -> CategoryBlue
-        NoteCategory.DEV -> CategoryGreen
-        NoteCategory.INVEST -> CategoryAmber
-        NoteCategory.TODO -> CategoryOrange
-        NoteCategory.RESEARCH -> CategoryViolet
-        NoteCategory.UNCLASSIFIED -> CategoryGray
-    }
+private fun categoryColorFor(category: NoteCategory): Color = when (category) {
+    NoteCategory.WORK         -> CategoryBlue
+    NoteCategory.DEV          -> CategoryGreen
+    NoteCategory.INVEST       -> CategoryAmber
+    NoteCategory.TODO         -> CategoryOrange
+    NoteCategory.RESEARCH     -> CategoryViolet
+    NoteCategory.UNCLASSIFIED -> CategoryGray
 }
 
 private fun Long.toKoreanTimeText(): String {

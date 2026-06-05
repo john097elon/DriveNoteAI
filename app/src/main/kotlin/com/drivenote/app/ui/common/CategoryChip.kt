@@ -2,7 +2,6 @@ package com.drivenote.app.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,22 +19,20 @@ import com.drivenote.app.ui.theme.CategoryViolet
 @Composable
 fun CategoryChip(category: NoteCategory) {
     Text(
-        text = category.label,
+        text  = category.label,
         color = Color.White,
-        style = MaterialTheme.typography.labelMedium,
+        style = MaterialTheme.typography.labelSmall,
         modifier = Modifier
-            .background(color = colorFor(category), shape = RoundedCornerShape(14.dp))
-            .padding(horizontal = 12.dp, vertical = 6.dp)
+            .background(color = colorFor(category), shape = MaterialTheme.shapes.extraSmall)
+            .padding(horizontal = 10.dp, vertical = 5.dp)
     )
 }
 
-private fun colorFor(category: NoteCategory): Color {
-    return when (category) {
-        NoteCategory.WORK -> CategoryBlue
-        NoteCategory.DEV -> CategoryGreen
-        NoteCategory.INVEST -> CategoryAmber
-        NoteCategory.TODO -> CategoryOrange
-        NoteCategory.RESEARCH -> CategoryViolet
-        NoteCategory.UNCLASSIFIED -> CategoryGray
-    }
+private fun colorFor(category: NoteCategory): Color = when (category) {
+    NoteCategory.WORK         -> CategoryBlue
+    NoteCategory.DEV          -> CategoryGreen
+    NoteCategory.INVEST       -> CategoryAmber
+    NoteCategory.TODO         -> CategoryOrange
+    NoteCategory.RESEARCH     -> CategoryViolet
+    NoteCategory.UNCLASSIFIED -> CategoryGray
 }
