@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 
 data class SettingsUiState(
     val endpoint: String = "",
+    val authToken: String = "",
     val lastSyncAt: Long? = null,
     val statusMessage: String? = null
 )
@@ -40,6 +41,7 @@ class SettingsViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     endpoint = getHermesEndpointUseCase(),
+                    authToken = settingsRepository.getHermesAuthToken(),
                     lastSyncAt = settingsRepository.getLastSyncAt()
                 )
             }
@@ -50,10 +52,15 @@ class SettingsViewModel @Inject constructor(
         _uiState.update { it.copy(endpoint = endpoint) }
     }
 
+    fun setAuthToken(authToken: String) {
+        _uiState.update { it.copy(authToken = authToken) }
+    }
+
     fun saveEndpoint() {
         viewModelScope.launch {
             setHermesEndpointUseCase(_uiState.value.endpoint)
-            _uiState.update { it.copy(statusMessage = "엔드포인트를 저장했습니다.") }
+            settingsRepository.setHermesAuthToken(_uiState.value.authToken)
+            _uiState.update { it.copy(statusMessage = "Hermes 연결 설정을 저장했습니다.") }
         }
     }
 

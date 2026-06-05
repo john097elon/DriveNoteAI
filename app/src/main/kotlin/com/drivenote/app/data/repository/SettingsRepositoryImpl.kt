@@ -26,6 +26,20 @@ class SettingsRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getHermesAuthToken(): String {
+        return settingsDao.getValue(KEY_HERMES_AUTH_TOKEN).orEmpty()
+    }
+
+    override suspend fun setHermesAuthToken(authToken: String) {
+        settingsDao.upsert(
+            SettingEntity(
+                key = KEY_HERMES_AUTH_TOKEN,
+                value = authToken.trim(),
+                updatedAt = System.currentTimeMillis()
+            )
+        )
+    }
+
     override suspend fun getDeviceId(): String {
         val existing = settingsDao.getValue(KEY_DEVICE_ID)
         if (existing != null) return existing
@@ -56,6 +70,7 @@ class SettingsRepositoryImpl @Inject constructor(
 
     private companion object {
         const val KEY_HERMES_ENDPOINT = "hermes_endpoint"
+        const val KEY_HERMES_AUTH_TOKEN = "hermes_auth_token"
         const val KEY_DEVICE_ID = "device_id"
         const val KEY_LAST_SYNC_AT = "last_sync_at"
         const val DEFAULT_ENDPOINT = "https://hermes.local"

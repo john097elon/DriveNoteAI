@@ -104,6 +104,7 @@ fun DriveNoteNavHost() {
                 SettingsScreen(
                     uiState = uiState,
                     onEndpointChanged = viewModel::setEndpoint,
+                    onAuthTokenChanged = viewModel::setAuthToken,
                     onSaveEndpoint = viewModel::saveEndpoint,
                     onSyncNow = viewModel::syncNow,
                     onClearStatus = viewModel::clearStatus

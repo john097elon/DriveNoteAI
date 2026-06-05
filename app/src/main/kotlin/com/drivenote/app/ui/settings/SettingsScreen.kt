@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter
 fun SettingsScreen(
     uiState: SettingsUiState,
     onEndpointChanged: (String) -> Unit,
+    onAuthTokenChanged: (String) -> Unit,
     onSaveEndpoint: () -> Unit,
     onSyncNow: () -> Unit,
     onClearStatus: () -> Unit
@@ -53,8 +54,14 @@ fun SettingsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text("API 엔드포인트") }
                     )
+                    OutlinedTextField(
+                        value = uiState.authToken,
+                        onValueChange = onAuthTokenChanged,
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("API 키 (Bearer, 선택)") }
+                    )
                     Button(onClick = onSaveEndpoint, modifier = Modifier.fillMaxWidth()) {
-                        Text("엔드포인트 저장")
+                        Text("Hermes 설정 저장")
                     }
                     Button(onClick = onSyncNow, modifier = Modifier.fillMaxWidth()) {
                         Text("지금 동기화")

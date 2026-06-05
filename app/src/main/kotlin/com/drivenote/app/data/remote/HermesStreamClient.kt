@@ -32,6 +32,9 @@ class HermesStreamClient @Inject constructor(
         httpClient.preparePost("$endpoint/v1/chat/completions") {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             header(HttpHeaders.Accept, "text/event-stream")
+            settingsRepository.getHermesAuthToken().takeIf { it.isNotBlank() }?.let { authToken ->
+                header(HttpHeaders.Authorization, "Bearer $authToken")
+            }
             setBody(request)
         }.execute { response ->
             val channel = response.bodyAsChannel()
